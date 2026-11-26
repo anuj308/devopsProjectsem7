@@ -98,6 +98,10 @@ Ansible core 2.16.3 was installed but initially rejected the terminal’s ISO885
 
 `aws --version` returned `aws-cli/2.35.21` in the learner’s terminal. This verifies the executable, not an AWS login. No credentials or cloud resources were needed.
 
+## Checkpoints 3–4 — From local file to HTTP
+
+The browser preview showed the green `Deployment v1` badge at narrow widths. The first Nginx container returned HTTP 403: the host assets had mode 0600. Setting `COPY --chmod=0644` in the Dockerfile, rebuilding the image and replacing the container produced HTTP 200 and the expected version marker in the learner’s browser. This distinguishes a reachable server with a file-access problem from an unreachable server. The local demonstration screenshot is saved at [local-v1.png](screenshots/local-v1.png).
+
 ## Checkpoint template
 
 ### Learning objectives
