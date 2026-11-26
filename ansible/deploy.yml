@@ -1,0 +1,66 @@
+---
+- name: Deploy the static website
+  hosts: web
+  become: true
+  vars:
+    source_dir: "{{ playbook_dir }}/../app"
+    build_id: "{{ lookup('ansible.builtin.file', source_dir + '/Dockerfile', rstrip=false) | hash('sha256') }}{{ lookup('ansible.builtin.file', source_dir + '/index.html', rstrip=false) | hash('sha256') }}{{ lookup('ansible.builtin.file', source_dir + '/styles.css', rstrip=false) | hash('sha256') }}"
+    image: "devops-web:{{ ((build_id + lookup('ansible.builtin.file', source_dir + '/.dockerignore', rstrip=false)) | hash('sha256'))[:24] }}"
+  tasks:
+    - name: Install Docker
+      ansible.builtin.apt:
+        name: docker.io
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+        lock_timeout: 120
+    - name: Start and enable Docker
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+    - name: Create the remote build directory
+      ansible.builtin.file:
+        path: /opt/devops-web
+        state: directory
+        mode: '0755'
+    - name: Copy application and build files
+      ansible.builtin.copy:
+        src: "{{ source_dir }}/{{ item }}"
+        dest: "/opt/devops-web/{{ item }}"
+        mode: '0644'
+      loop: [Dockerfile, index.html, styles.css, .dockerignore]
+    - name: Check whether this revision is already built
+      ansible.builtin.command: "docker image inspect {{ image }}"
+      register: image_check
+      changed_when: false
+      failed_when: image_check.rc not in [0, 1]
+    - name: Build the revision image
+      ansible.builtin.command: "docker build -t {{ image }} /opt/devops-web"
+      when: image_check.rc == 1
+    - name: Check whether the named container exists
+      ansible.builtin.command: docker container inspect devops-web
+      register: container_check
+      changed_when: false
+      failed_when: container_check.rc not in [0, 1]
+    - name: Determine whether replacement is needed
+      ansible.builtin.set_fact:
+        replace_web: "{{ container_check.rc != 0 or (container_check.stdout | from_json)[0].Config.Image != image }}"
+    - name: Remove the previous revision
+      ansible.builtin.command: docker rm -f devops-web
+      when: container_check.rc == 0 and replace_web
+    - name: Run the new revision
+      ansible.builtin.command: "docker run -d --name devops-web --restart unless-stopped -p 80:80 {{ image }}"
+      when: replace_web
+    - name: Start the unchanged revision if stopped
+      ansible.builtin.command: docker start devops-web
+      when: not replace_web and not (container_check.stdout | from_json)[0].State.Running
+    - name: Verify the website responds on EC2
+      ansible.builtin.uri:
+        url: http://127.0.0.1/
+        status_code: 200
+        return_content: true
+      register: page
+      until: (page.status | default(-1)) == 200 and 'Deployment v' in (page.content | default(''))
+      retries: 12
+      delay: 3

@@ -2,7 +2,7 @@
 
 A learning-focused DevOps project that packages a static website with Docker and Nginx, provisions an AWS EC2 environment with Terraform, and configures and deploys the application with Ansible.
 
-> **Status:** Checkpoint 2 complete — local toolchain verified.
+> **Status:** Static site verified locally over HTTP. AWS access setup is next; no EC2 instance has been provisioned.
 >
 > **AWS region:** Mumbai (`ap-south-1`). No cloud resources have been created yet.
 
@@ -96,8 +96,8 @@ Every checkpoint follows the same loop:
 
 - [x] Understand the architecture and initialize a safe repository.
 - [x] Install and verify the local toolchain.
-- [ ] Build the responsive static webpage.
-- [ ] Build and test the Docker image locally.
+- [x] Build the responsive static webpage.
+- [x] Build and test the Docker image locally (HTTP 200 and `Deployment v1` confirmed).
 - [ ] Configure secure AWS access, billing alerts, and the SSH key.
 - [ ] Define and validate the Terraform infrastructure.
 - [ ] Review the plan and provision AWS.
@@ -116,6 +116,12 @@ Every checkpoint follows the same loop:
 - Treat Docker group membership as root-equivalent access.
 - Verify current AWS credits and prices; “Free Tier” is not a guarantee of zero cost.
 - Destroy the demonstration infrastructure when it is no longer required.
+
+## Resume at Checkpoint 5 — AWS access
+
+The budget alert and root MFA were confirmed. The last reported status was that the dedicated `devops-project` IAM user had not been created. In IAM → Users, create it without console access or attached policies, or confirm it already exists. Do not generate a key yet. Review the Terraform permissions before granting access, then verify the named CLI profile with `aws sts get-caller-identity --profile devops-project` without sharing its output publicly.
+
+Terraform and Ansible configuration, the reviewed AWS apply, the deployment and update demo, and verified teardown are still pending. No EC2 deployment has been performed.
 
 ## Current local assessment
 
