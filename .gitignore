@@ -34,6 +34,19 @@ ansible/.ansible/
 # Generated evidence that may contain addresses or terminal details
 docs/screenshots/private/
 
+# Local report-generation environment (virtualenv, packages, renders and scratch files)
+/.office-build/
+
+# Keep only the final submission files; the demo guide is maintained in docs/.
+/submission/*
+!/submission/LPU_DevOps_Report_Final.docx
+!/submission/LPU_DevOps_Report_Final.pdf
+!/submission/DevOps_Viva_Final.pptx
+
+# Temporary lock files created while editing Office documents
+~$*
+.~lock.*#
+
 # Editor and operating-system files
 .vscode/
 .idea/
