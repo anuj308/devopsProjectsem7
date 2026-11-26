@@ -2,7 +2,7 @@
 
 A learning-focused DevOps project that packages a static website with Docker and Nginx, provisions an AWS EC2 environment with Terraform, and configures and deploys the application with Ansible.
 
-> **Status:** Checkpoint 1 — architecture and repository foundation.
+> **Status:** Checkpoint 2 complete — local toolchain verified.
 >
 > **AWS region:** Mumbai (`ap-south-1`). No cloud resources have been created yet.
 
@@ -95,7 +95,7 @@ Every checkpoint follows the same loop:
 ## Planned checkpoints
 
 - [x] Understand the architecture and initialize a safe repository.
-- [ ] Install and verify the local toolchain.
+- [x] Install and verify the local toolchain.
 - [ ] Build the responsive static webpage.
 - [ ] Build and test the Docker image locally.
 - [ ] Configure secure AWS access, billing alerts, and the SSH key.
@@ -121,8 +121,8 @@ Every checkpoint follows the same loop:
 
 - OS: Zorin OS 18.1 (`x86_64`).
 - Available: Docker CLI/Engine packages, OpenSSH, Git, curl, and Python 3.
-- Docker service: installed but not currently enabled/running.
-- To install: Terraform, Ansible, and AWS CLI v2.
+- Docker Engine: tested locally with `hello-world`.
+- Verified: Terraform 1.17.2, Ansible core 2.16.3, and AWS CLI 2.35.21.
 - AWS credentials and a project SSH key: not configured yet.
 
 Detailed checkpoint notes are kept in [docs/LEARNING_GUIDE.md](docs/LEARNING_GUIDE.md).

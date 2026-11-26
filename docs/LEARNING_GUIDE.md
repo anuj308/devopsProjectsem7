@@ -82,6 +82,22 @@ Before any source commit, this foundation can be removed by deleting the created
 
 ---
 
+## Checkpoint 2A — Docker Engine verified
+
+On the local machine, `sudo docker --context default run --rm hello-world` printed `Hello from Docker!`. The initial image-cache miss was expected: the engine pulled the image, created a container, and returned its output. `--rm` removes the stopped container, not the downloaded image. No AWS resources are involved.
+
+## Checkpoint 2B — Terraform CLI verified
+
+The learner verified HashiCorp’s package-signing key, configured its Ubuntu Noble APT repository, and installed Terraform with `sudo apt install terraform`. The terminal returned `Terraform v1.17.2` on `linux_amd64`. `apt update` made the package discoverable; `apt install` installed the executable. Checking the version did not contact AWS or provision infrastructure.
+
+## Checkpoint 2C — Ansible and UTF-8
+
+Ansible core 2.16.3 was installed but initially rejected the terminal’s ISO8859-1 encoding. In the project shell, `export LC_ALL=C.UTF-8` followed by `ansible -i 'localhost,' localhost -c local -m ping` returned `SUCCESS`, `changed: false`, and `pong`. This tests local module execution, not EC2 connectivity. Repeat the export in a new terminal if the locale error returns.
+
+## Checkpoint 2D — AWS CLI verified
+
+`aws --version` returned `aws-cli/2.35.21` in the learner’s terminal. This verifies the executable, not an AWS login. No credentials or cloud resources were needed.
+
 ## Checkpoint template
 
 ### Learning objectives
