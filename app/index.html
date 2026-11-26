@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Automated Docker Application Deployment on AWS Using Terraform and Ansible</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <header>
+      <p class="badge">Deployment v1</p>
+      <h1>Automated Docker Application Deployment on AWS Using Terraform and Ansible</h1>
+      <p>By Anuj Kumar Sharma</p>
+      <p>This page is the application being deployed. Its version label lets a visitor tell which revision the server is serving.</p>
+    </header>
+    <section>
+      <h2>Objective</h2>
+      <p>Replace manual server setup with a process that can create a server, publish a page, update it, and remove the infrastructure when the demonstration ends.</p>
+    </section>
+    <section>
+      <h2>Deployment workflow</h2>
+      <ol>
+        <li><strong>Package locally.</strong> Docker builds an image containing this page and Nginx, the web server.</li>
+        <li><strong>Create infrastructure.</strong> Terraform defines the AWS network, access rules, and EC2 virtual machine.</li>
+        <li><strong>Configure the server.</strong> Ansible connects over SSH, installs Docker, copies the source, and builds and starts the container.</li>
+        <li><strong>Verify and update.</strong> Open the EC2 address in a browser. After changing the version label, rerun Ansible and check the same address.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Expected outcome</h2>
+      <p>The same webpage works locally and on EC2. A content update does not require a new server, and Terraform can remove the project infrastructure after the demonstration.</p>
+    </section>
+  </main>
+</body>
+</html>
